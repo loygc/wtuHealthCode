@@ -5,7 +5,7 @@
 [Script]
 武纺畅行码签到 = type=cron,cronexp=5 0 * * *,wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/wtuCode.js
 
-获取武纺畅行码Cookie = type=http-request,pattern=https:\/\/js\.wtu\.edu\.cn\/health\/mobile\/health_report,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/getWtuCookie.js
+获取武纺畅行码Cookie = type=http-request,pattern=https:\/\/jk\.wtu\.edu\.cn\/health\/mobile\/health_report,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/getWtuCookie.js
 
 [MITM]
 hostname = jk.wtu.edu.cn
