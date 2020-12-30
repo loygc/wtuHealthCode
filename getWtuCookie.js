@@ -14,6 +14,7 @@ const checkInUrl= "https://jk.wtu.edu.cn/health/mobile/health_report/"
 const loyio= init()
 
 
+
 GetCookie()
 
 
@@ -21,60 +22,55 @@ GetCookie()
 function GetCookie() {
   try {
     if ($request.headers && $request.url.match(/jk\.wtu\.edu\.cn.*=health\/mobile\/health_report/)) {
-      var CV = $request.headers['Cookie']
-      if (CV.match(/(pt_key=.+?pt_pin=|pt_pin=.+?pt_key=)/)) {
-        var CookieValue = CV.match(/pt_key=.+?;/) + CV.match(/pt_pin=.+?;/)
-        var CK1 = $nobyda.read("CookieJD")
-        var CK2 = $nobyda.read("CookieJD2")
-        var AccountOne = CK1 ? CK1.match(/pt_pin=.+?;/) ? CK1.match(/pt_pin=(.+?);/)[1] : null : null
-        var AccountTwo = CK2 ? CK2.match(/pt_pin=.+?;/) ? CK2.match(/pt_pin=(.+?);/)[1] : null : null
-        var UserName = CookieValue.match(/pt_pin=(.+?);/)[1]
-        var DecodeName = decodeURIComponent(UserName)
-        if (!AccountOne || UserName == AccountOne) {
-          var CookieName = "wtuCodeCookie";
-          var CookieKey = "CookieJD";
-        } else if (!AccountTwo || UserName == AccountTwo) {
-          var CookieName = " [账号二] ";
-          var CookieKey = "CookieJD2";
+        var ckHeader = $request.headers
+        var rqBody = $request.body
+        loyio.msg("测试数据ckHeader: ", ckHeader)
+        loyio.msg("测试数据rqBody: ", rqBody)
+        if (ckHeader["Authorization"] && rqBody){
+            var CookieHeaderKey = "wtuCkHeader"
+            var CookieBodyKey = "wtuRqBody"
         } else {
-          loyio.msg("更新纺大畅行码Cookie失败", "非历史写入账号 ‼️", '请开启脚本内"DeleteCookie"以清空Cookie ‼️')
+          loyio.msg("写入纺大畅行码Cookie失败", "", "请查看脚本内说明, 打开企业微信获取 ‼️")
           loyio.done()
           return
         }
-      } else {
-        loyio.msg("写入纺大畅行码Cookie失败", "", "请查看脚本内说明, 打开企业微信获取 ‼️")
-        loyio.done()
-        return
-      }
-      if ($nobyda.read(CookieKey)) {
-        if ($nobyda.read(CookieKey) != CookieValue) {
-          var cookie = $nobyda.write(CookieValue, CookieKey);
-          if (!cookie) {
-            $nobyda.notify("用户名: " + DecodeName, "", "更新京东" + CookieName + "Cookie失败 ‼️");
-          } else {
-            $nobyda.notify("用户名: " + DecodeName, "", "更新京东" + CookieName + "Cookie成功 🎉");
+        if (loyio.getdata(CookieHeaderKey) || loyio.getdata(CookieBodyKey)) {
+          if (loyio.getdata(CookieHeaderKey) != ckHeader) {
+            var cookieH = loyio.setdata(CookieHeaderKey, ckHeader);
+            if (!cookie) {
+              loyio.msg("更新纺大畅行码Cookie失败 ‼️");
+            } else {
+              loyio.msg("更新纺大畅行码Cookie成功 🎉");
+            }
+          } else if(loyio.getdata(CookieBodyKey) != rqBody) {
+            var cookieB = loyio.setdata(CookieBodyKey, rqBody);
+            if (!cookie) {
+              loyio.msg("更新纺大畅行码位置失败 ‼️");
+            } else {
+              loyio.msg("更新纺大畅行码位置成功 🎉");
+            }
+          }else{
+            console.log("纺大畅行码: \n与历史Cookie相同, 跳过写入")
           }
         } else {
-          console.log("京东: \n与历史Cookie相同, 跳过写入")
+          var cookieH = loyio.setdata(CookieHeaderKey, ckHeader);
+          var cookieB = loyio.setdata(CookieBodyKey, rqBody);
+          if (!cookieH ||  !cookieB) {
+            loyio.msg("首次写入纺大畅行码Cookie失败 ‼️");
+          } else {
+            loyio.msg("首次写入纺大畅行码Cookie成功 🎉");
+          }
         }
       } else {
-        var cookie = $nobyda.write(CookieValue, CookieKey);
-        if (!cookie) {
-          $nobyda.notify("用户名: " + DecodeName, "", "首次写入京东" + CookieName + "Cookie失败 ‼️");
-        } else {
-          $nobyda.notify("用户名: " + DecodeName, "", "首次写入京东" + CookieName + "Cookie成功 🎉");
-        }
+        loyio.msg("写入纺大畅行码Cookie失败", "", "请检查匹配URL或配置内脚本类型 ‼️");
       }
-    } else {
-      $nobyda.notify("写入京东Cookie失败", "", "请检查匹配URL或配置内脚本类型 ‼️");
-    }
   } catch (eor) {
-    loyio.setdata("", "CookieWtu")
-    loyio.setdata("", "wtuHCdata")
-    $nobyda.notify("写入京东Cookie失败", "", '已尝试清空历史Cookie, 请重试 ⚠️')
+    loyio.setdata("wtuCkHeader", "")
+    loyio.setdata("wtuRqBody", "")
+    $nobyda.notify("写入纺大畅行码Cookie失败", "", '已尝试清空历史Cookie, 请重试 ⚠️')
     console.log(JSON.stringify(eor) + "\n" + eor + "\n" + JSON.stringify($request.headers))
   }
-  $nobyda.done()
+  loyio.done()
 }
 
 function init() {
