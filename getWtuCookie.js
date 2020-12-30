@@ -1,18 +1,19 @@
 /*************************
 【Surge 4.2+ 脚本配置】:
+
+成功获取畅行码Cookie后，请禁用“获取纺大畅行码Cookie”脚本
 *************************
 
 [Script]
-武纺畅行码签到 = type=cron,cronexp=5 0 * * *,wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/wtuCode.js
+纺大畅行码签到 = type=cron,cronexp=5 0 * * *,wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/wtuCode.js
 
-获取武纺畅行码Cookie = type=http-request,pattern=https:\/\/jk\.wtu\.edu\.cn\/health\/mobile\/health_report,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/getWtuCookie.js
+获取纺大畅行码Cookie = type=http-request,pattern=https:\/\/jk\.wtu\.edu\.cn\/health\/mobile\/health_report,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/getWtuCookie.js
 
 [MITM]
-hostname = jk.wtu.edu.cn
+hostname = api.m.jd.com 
 
-**************************/
+*/
 
-const checkInUrl= "https://jk.wtu.edu.cn/health/mobile/health_report/"
 const loyio= init()
 
 
@@ -23,7 +24,7 @@ GetCookie()
 
 function GetCookie() {
   try {
-    if ($request.headers && $request.url.match(/jk\.wtu\.edu\.cn.*=health\/mobile\/health_report/)) {
+    if ($request.headers && $request.url.match(/jk\.wtu\.edu\.cn\/health\/mobile\/health_report/)) {
         var ckHeader = $request.headers
         var rqBody = $request.body
         loyio.msg("测试数据ckHeader: ", ckHeader)
