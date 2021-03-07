@@ -22,9 +22,20 @@ sign()
 
 function sign() {
   var urlbody = loyio.getdata("wtuRqBody")
-  var ckheader= loyio.getdata("wtuCkHeader")
+  var headers = {
+    "Host":"jk.wtu.edu.cn",
+    "Content-Type":"application/x-www-form-urlencoded",
+    "Accept-Language":"en-us",
+    "Accept-Encoding":"gzip, deflate, br",
+    "Connection":"keep-alive",
+    "Accept":"*/*",
+    "User-Agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 wxwork/3.0.36 MicroMessenger/7.0.11(0x17000b21) NetType/4G Language/en",
+    "Authorization":loyio.getdata("wtuCkHeaderAuth"),
+    "Referer":"https://servicewechat.com/wx186658badc0a17c7/11/page-frame.html",
+    "Content-Length":"668"
+  }
     if(urlbody || ckheader){
-      const url = { url: checkInUrl, headers: JSON.parse(ckheader) ,body: urlbody}
+      const url = { url: checkInUrl, headers: headers ,body: urlbody}
       loyio.post(url, (error, response, data) => {
       const title = `纺大畅行码打卡`
       let subTitle = ''

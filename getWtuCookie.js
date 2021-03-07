@@ -25,12 +25,12 @@ GetCookie()
 function GetCookie() {
   try {
     if ($request.headers && $request.url.match(/jk\.wtu\.edu\.cn\/health\/mobile\/health_report/)) {
-        var ckHeader = $request.headers
+        var ckHeaderAuth = $request.headers.Authorization
         var rqBody = $request.body
-        loyio.msg("测试数据ckHeader: ", ckHeader)
+        loyio.msg("测试数据ckHeader: ", ckHeaderAuth)
         loyio.msg("测试数据rqBody: ", rqBody)
         if (ckHeader["Authorization"] && rqBody){
-            var CookieHeaderKey = "wtuCkHeader"
+            var CookieHeaderKey = "wtuCkHeaderAuth"
             var CookieBodyKey = "wtuRqBody"
         } else {
           loyio.msg("写入纺大畅行码Cookie失败", "", "请查看脚本内说明, 打开企业微信获取 ‼️")
@@ -68,9 +68,9 @@ function GetCookie() {
         loyio.msg("写入纺大畅行码Cookie失败", "", "请检查匹配URL或配置内脚本类型 ‼️");
       }
   } catch (eor) {
-    loyio.setdata("wtuCkHeader", "")
+    loyio.setdata("wtuCkHeaderAuth", "")
     loyio.setdata("wtuRqBody", "")
-    $nobyda.notify("写入纺大畅行码Cookie失败", "", '已尝试清空历史Cookie, 请重试 ⚠️')
+    loyio.msg("写入纺大畅行码Cookie失败", "", '已尝试清空历史Cookie, 请重试 ⚠️')
     console.log(JSON.stringify(eor) + "\n" + eor + "\n" + JSON.stringify($request.headers))
   }
   loyio.done()
