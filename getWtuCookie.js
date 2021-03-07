@@ -5,9 +5,9 @@
 *************************
 
 [Script]
-纺大畅行码签到 = type=cron,cronexp=5 0 * * *,wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/wtuCode.js
+纺大畅行码签到 = type=cron,cronexp=13 7 * * *,wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/wtuCode.js
 
-获取纺大畅行码Cookie = type=http-request,pattern=https:\/\/jk\.wtu\.edu\.cn\/health\/mobile\/health_report,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/getWtuCookie.js
+获取纺大畅行码Cookie = type=http-request,pattern=https:\/\/jk\.wtu\.edu\.cn\/health\/mobile\/health_report,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/getWtuCookie.js,script-update-interval=0
 
 [MITM]
 hostname = jk.wtu.edu.cn
