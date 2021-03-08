@@ -5,12 +5,31 @@
 *************************
 
 [Script]
-纺大畅行码签到 = type=cron,cronexp=5 0 * * *,wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/wtuCode.js
+纺大畅行码签到 = type=cron,cronexp=13 7 * * *,wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/wtuCode.js
 
 获取纺大畅行码Cookie = type=http-request,pattern=https:\/\/jk\.wtu\.edu\.cn\/health\/mobile\/health_report,script-path=https://raw.githubusercontent.com/loyio/wtuHealthCode/main/getWtuCookie.js
 
 [MITM]
-hostname = api.m.jd.com 
+hostname = jk.wtu.edu.cn 
+
+*/
+
+/*************************
+【Quantumult X 脚本配置】:
+
+成功获取畅行码Cookie后，请禁用“获取纺大畅行码Cookie”脚本
+*************************
+
+[task_local]
+#纺大畅行码签到
+13 7 * * * https://raw.githubusercontent.com/loyio/wtuHealthCode/main/wtuCode.js
+
+[rewrite_local]
+# 获取Cookie
+^https:\/\/jk\.wtu\.edu\.cn\/health\/mobile\/health_report url script-request-header https://raw.githubusercontent.com/loyio/wtuHealthCode/main/getWtuCookie.js
+
+[mitm]
+hostname = jk.wtu.edu.cn 
 
 */
 
